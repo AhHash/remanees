@@ -2,8 +2,21 @@ import { ErrorRequestHandler } from "express";
 import { StatusCodes } from "http-status-codes";
 
 const handler: ErrorRequestHandler = (err, req, res, next) => {
-  const text = err.text || "Something went wrong. Please try again later!";
-  const code = err.code || StatusCodes.INTERNAL_SERVER_ERROR;
+  let text = err.text || "Something went wrong. Please try again later!";
+  let code = err.code || StatusCodes.INTERNAL_SERVER_ERROR;
+
+  console.log(err);
+
+  if (err.code === 11000) {
+    text = "This  email alreasy exists. Try logging in?";
+    code = StatusCodes.BAD_REQUEST;
+  }
+
+  if (err.name === "ValidationError") {
+    text = `The following fiels are invalid: ${Object.keys(err.errors).join(
+      " - "
+    )}`;
+  }
 
   res.status(code).json({
     msg: text,

@@ -1,6 +1,6 @@
 import mongoose from "mongoose";
 import isEmail from "validator/lib/isEmail";
-import bcrypt, { hash } from "bcryptjs";
+import bcrypt from "bcryptjs";
 import jwt from "jsonwebtoken";
 
 interface ValidationProps {
@@ -15,44 +15,44 @@ const userSchema = new mongoose.Schema({
     minLength: 3,
     maxLength: 25,
   },
-  username: {
-    type: String,
-    unique: [true, "Please choose a different username."],
-  },
   email: {
     type: String,
     unique: [true, "Please choose a different email."],
     validate: {
       validator: isEmail,
       message: (props: ValidationProps) =>
-        `${props.value} is not a valid phone number!`,
+        `${props.value} is not a valid email!`,
     },
-    required: function () {
-      return !(this as { username: string }).username;
-    },
+    required: [true, "An email is required."],
   },
   password: {
     type: String,
     required: [true, "Password is required."],
     minLength: 6,
+    select: false,
   },
 });
 
 userSchema.pre("save", async function () {
+  if (!this.isModified("password")) return;
   const salt = await bcrypt.genSalt();
   const hashedPassword = await bcrypt.hash(this.password, salt);
-
   this.password = hashedPassword;
 });
 
 userSchema.methods.comparePassword = async function (
   candidatePassword: string
 ) {
+  console.log(candidatePassword, this.password);
   return bcrypt.compare(candidatePassword, this.password);
 };
 
 userSchema.methods.createJWT = function () {
-  const token = jwt.sign(this._id, process.env.JWT_SECRET!, {
+  const token = jwt.sign({ id: this._id }, process.env.JWT_SECRET!, {
     expiresIn: process.env.JWT_LIFETIME,
   });
+  return token;
 };
+
+const User = mongoose.model("User", userSchema);
+export default User;

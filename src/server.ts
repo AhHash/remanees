@@ -1,22 +1,32 @@
 // packages
 import dotenv from "dotenv";
 dotenv.config();
+// import path from "path";
 
 // express
 import express from "express";
+import "express-async-errors";
 const server = express();
 
 // imports
 import connectDB from "./db/connect";
 import { CustomError } from "./errors";
 
+// routes
+import authRouter from "./routers/authRouter";
+
 // middleware
 import errorHandler from "./middleware/error-handler";
 
 // routes
-server.get("*", (req, res) => {
-  throw new CustomError("hello", 500);
-});
+
+server.use(express.json());
+
+// server.get("*", (req, res) => {
+//   res.sendFile(path.resolve(__dirname, "../client/dist", "index.html"));
+// });
+
+server.use("/api/v1/users", authRouter);
 
 server.use(errorHandler);
 
