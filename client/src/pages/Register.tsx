@@ -1,66 +1,158 @@
-import React, { useState } from "react";
+import React, {
+  ChangeEventHandler,
+  FormEventHandler,
+  useEffect,
+  useState,
+} from "react";
 import styled from "styled-components";
 import { Navbar } from "../components";
+import { useDispatch, useSelector } from "react-redux";
+import { loginUser, registerUser } from "../features/user/userSlice";
+import { toast } from "react-toastify";
+import { useNavigate } from "react-router-dom";
+
+const initialState = {
+  isUser: false,
+  name: "",
+  email: "",
+  password: "",
+};
 
 const Register = () => {
-  const [isUser, setIsUser] = useState(false);
+  const [values, setValues] = useState(initialState);
+
+  const dispatch = useDispatch();
+  const { user, isLoading } = useSelector((store: any) => store.user);
+
+  const navigate = useNavigate();
+
+  useEffect(() => {
+    if (user) {
+      console.log("hello");
+
+      setTimeout(() => {
+        navigate("/dashboard");
+      }, 3000);
+    }
+  }, [user]);
+
+  const handleSubmit: FormEventHandler = (event) => {
+    event.preventDefault();
+
+    const { name, email, password, isUser } = values;
+
+    if (isUser) {
+      if (!email || !password) {
+        toast.warning("Please enter all values!");
+        return;
+      }
+      dispatch<any>(loginUser({ email, password }));
+      return;
+    }
+
+    if (!email || !password || !name) {
+      toast.warning("Please enter all values!");
+      return;
+    }
+    dispatch<any>(registerUser({ email, password, name }));
+  };
+
+  const handleChange: ChangeEventHandler = (event) => {
+    setValues({
+      ...values,
+      [(event.target! as HTMLInputElement).name]: (
+        event.target! as HTMLInputElement
+      ).value,
+    });
+  };
 
   return (
     <>
       <Navbar />
       <Wrapper>
-        <form>
-          <h3 className="form-title">{isUser ? "login" : "register"}</h3>
-          <hr />
-          <div className="form-fields">
-            {!isUser && (
-              <div className="form-control">
-                <label htmlFor="name">Name: </label>
-                <input id="name" type="text" placeholder="e.g. Anis" />
-              </div>
-            )}
-
-            <div className="form-control">
-              <label htmlFor="email">Email: </label>
-              <input id="email" type="email" placeholder="e.g. anis@anis.com" />
-            </div>
-            <div className="form-control">
-              <label htmlFor="passowrd">Password: </label>
-              <input
-                id="password"
-                type="password"
-                placeholder="e.g. ******** :)"
-              />
-            </div>
-          </div>
-          <button type="submit" className="btn submit-btn">
-            submit
-          </button>
-        </form>
-        {isUser ? (
-          <p>
-            Not a member yet?
-            <button
-              className="login"
-              onClick={() => {
-                setIsUser(false);
-              }}
-            >
-              register
-            </button>
-          </p>
+        {user ? (
+          <>
+            <h3>Redirecting...</h3>
+          </>
         ) : (
-          <p>
-            Already a member?
-            <button
-              className="login"
-              onClick={() => {
-                setIsUser(true);
-              }}
-            >
-              login
-            </button>
-          </p>
+          <>
+            <form onSubmit={handleSubmit}>
+              <h3 className="form-title">
+                {values.isUser ? "login" : "register"}
+              </h3>
+              <hr />
+              <div className="form-fields">
+                {!values.isUser && (
+                  <div className="form-control">
+                    <label htmlFor="name">Name: </label>
+                    <input
+                      name="name"
+                      id="name"
+                      type="text"
+                      placeholder="e.g. Anis"
+                      onChange={handleChange}
+                      value={values.name}
+                    />
+                  </div>
+                )}
+
+                <div className="form-control">
+                  <label htmlFor="email">Email: </label>
+                  <input
+                    id="email"
+                    type="email"
+                    placeholder="e.g. anis@anis.com"
+                    name="email"
+                    onChange={handleChange}
+                    value={values.email}
+                  />
+                </div>
+                <div className="form-control">
+                  <label htmlFor="passowrd">Password: </label>
+                  <input
+                    id="password"
+                    type="password"
+                    name="password"
+                    placeholder="e.g. ******** :)"
+                    onChange={handleChange}
+                    value={values.password}
+                  />
+                </div>
+              </div>
+              <button
+                type="submit"
+                className="btn submit-btn"
+                disabled={isLoading}
+              >
+                submit
+              </button>
+            </form>
+            {values.isUser ? (
+              <p>
+                Not a member yet?
+                <button
+                  className="login"
+                  onClick={() => {
+                    setValues({ ...initialState, isUser: false });
+                  }}
+                >
+                  register
+                </button>
+              </p>
+            ) : (
+              <p>
+                Already a member?
+                <button
+                  className="login"
+                  onClick={() => {
+                    setValues({ ...initialState, isUser: true });
+                  }}
+                >
+                  login
+                </button>
+              </p>
+            )}
+          </>
         )}
       </Wrapper>
     </>
@@ -78,6 +170,7 @@ const Wrapper = styled.div`
 
   form {
     height: auto;
+    background: var(--white);
     max-width: 500px;
     width: 50vw;
     min-width: 300px;

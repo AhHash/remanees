@@ -17,7 +17,9 @@ const registerUser: RequestHandler = async (req, res) => {
 
   attachCookie({ res, token });
 
-  res.status(StatusCodes.OK).json({ name: user.name, email: user.email });
+  res
+    .status(StatusCodes.OK)
+    .json({ user: { name: user.name, email: user.email } });
 };
 
 const loginUser: RequestHandler = async (req, res) => {
@@ -39,7 +41,9 @@ const loginUser: RequestHandler = async (req, res) => {
 
   attachCookie({ res, token });
 
-  res.status(StatusCodes.OK).json({ user });
+  res
+    .status(StatusCodes.OK)
+    .json({ user: { name: user.name, email: user.email } });
 };
 
 export { registerUser, loginUser };

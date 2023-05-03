@@ -2,6 +2,8 @@
 import dotenv from "dotenv";
 dotenv.config();
 // import path from "path";
+import cors from "cors";
+import cookieParser from "cookie-parser";
 
 // express
 import express from "express";
@@ -10,23 +12,29 @@ const server = express();
 
 // imports
 import connectDB from "./db/connect";
-import { CustomError } from "./errors";
 
 // routes
 import authRouter from "./routers/authRouter";
+import taskRouter from "./routers/taskRouter";
 
 // middleware
 import errorHandler from "./middleware/error-handler";
+import checkAuthentication from "./middleware/checkAuthentication";
+import morgan from "morgan";
+
+server.use(morgan("dev"));
 
 // routes
-
+server.use(cors());
 server.use(express.json());
+server.use(cookieParser("%C&F)J@NcRfUjXn2r5u8x/A?D(G-KaPd"));
 
 // server.get("*", (req, res) => {
 //   res.sendFile(path.resolve(__dirname, "../client/dist", "index.html"));
 // });
 
 server.use("/api/v1/users", authRouter);
+server.use("/api/v1/tasks", checkAuthentication, taskRouter);
 
 server.use(errorHandler);
 

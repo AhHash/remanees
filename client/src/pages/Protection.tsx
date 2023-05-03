@@ -1,9 +1,12 @@
 import React from "react";
+import { useSelector } from "react-redux";
 import { Navigate } from "react-router-dom";
 
 const Protection = ({ children }: { children: React.ReactNode }) => {
-  if (false) {
-    return <Navigate to="/register" />;
+  const { user } = useSelector((store: any) => store.user);
+
+  if (!user) {
+    return <Navigate to="/" />;
   }
   return <>{children}</>;
 };
