@@ -1,5 +1,5 @@
 import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
-import { loginUserThunk, regiserUserThunk } from "./userThunk";
+import { loginUserThunk, regiserUserThunk, getUserThunk } from "./userThunk";
 import { toast } from "react-toastify";
 
 const initialState: {
@@ -32,7 +32,6 @@ const userSlice = createSlice({
       })
       .addCase(registerUser.fulfilled, (state, { payload }) => {
         const { user } = payload;
-        console.log(user);
 
         toast.success("Registered!");
         state.isLoading = false;
@@ -41,6 +40,17 @@ const userSlice = createSlice({
       .addCase(registerUser.rejected, (state, { payload }: any) => {
         state.isLoading = false;
         toast.error(payload);
+      })
+      .addCase(getUser.pending, (state) => {
+        state.isLoading = true;
+      })
+      .addCase(getUser.fulfilled, (state, { payload }) => {
+        const { user } = payload;
+        state.isLoading = false;
+        state.user = user;
+      })
+      .addCase(getUser.rejected, (state) => {
+        state.isLoading = false;
       });
   },
 });
@@ -58,5 +68,12 @@ export const registerUser = createAsyncThunk(
   "user/registerUser",
   async (user: object, thunkAPI: any) => {
     return regiserUserThunk("/users/register", user, thunkAPI);
+  }
+);
+
+export const getUser = createAsyncThunk(
+  "user/getUser",
+  async (_, thunkAPI: any) => {
+    return getUserThunk("/users/currentUser", thunkAPI);
   }
 );

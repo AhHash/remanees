@@ -34,9 +34,6 @@ const taskSchema = new mongoose.Schema(
       max: 1439,
       validate: {
         validator: function (value: number) {
-          console.log(value);
-          console.log((this as any).start);
-
           return (this as any).start + value < 1439;
         },
         message: "A task cannot be split into to days.",

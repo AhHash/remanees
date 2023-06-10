@@ -17,6 +17,16 @@ const getAllDueTasks: RequestHandler = async (req, res) => {
     },
   ]);
 
+  // let todayTasks = Task.aggregate([
+  //   {
+  //     $match: {
+  //       user: new mongoose.Types.ObjectId(userId),
+  //       isDone: false,
+  //       $expr: { $eq: [{ $day: "$lastUpdated" }, { $day: new Date() }] },
+  //     },
+  //   },
+  // ]);
+
   let previousTasks = Task.aggregate([
     {
       $match: {
@@ -44,9 +54,12 @@ const getAllDueTasks: RequestHandler = async (req, res) => {
 const getAllCompletedTasks: RequestHandler = async (req, res) => {
   const userId = (req as any).user.id;
 
-  const tasks = await Task.find({ isDone: true });
+  const tasks = await Task.find({
+    isDone: true,
+    user: new mongoose.Types.ObjectId(userId),
+  });
 
-  res.status(StatusCodes.OK).json(tasks);
+  res.status(StatusCodes.OK).json({ tasks });
 };
 
 const addTask: RequestHandler = async (req, res) => {
@@ -114,7 +127,7 @@ const removeTask: RequestHandler = async (req, res) => {
     throw new BadRequestError("A task ID is required.");
   }
 
-  await Task.findOneAndDelete({ id });
+  await Task.findOneAndDelete({ _id: id });
 
   res.json({ success: "Task removed." });
 };

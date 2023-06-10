@@ -6,8 +6,9 @@ const Protection = ({ children }: { children: React.ReactNode }) => {
   const { user } = useSelector((store: any) => store.user);
 
   if (!user) {
-    return <Navigate to="/" />;
+    return <Navigate to="/register" />;
   }
+
   return <>{children}</>;
 };
 

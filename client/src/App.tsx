@@ -4,8 +4,13 @@ import { Today, ThisWeek } from "./pages/dashboardPages";
 import { ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import "./app.css";
+import { useDispatch } from "react-redux";
+import { getUser } from "./features/user/userSlice";
 
 function App() {
+  const dispatch = useDispatch();
+  dispatch<any>(getUser());
+
   return (
     <BrowserRouter>
       <Routes>

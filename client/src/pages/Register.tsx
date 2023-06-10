@@ -7,7 +7,7 @@ import React, {
 import styled from "styled-components";
 import { Navbar } from "../components";
 import { useDispatch, useSelector } from "react-redux";
-import { loginUser, registerUser } from "../features/user/userSlice";
+import { loginUser, registerUser, getUser } from "../features/user/userSlice";
 import { toast } from "react-toastify";
 import { useNavigate } from "react-router-dom";
 
@@ -22,17 +22,14 @@ const Register = () => {
   const [values, setValues] = useState(initialState);
 
   const dispatch = useDispatch();
-  const { user, isLoading } = useSelector((store: any) => store.user);
-
   const navigate = useNavigate();
+  const { user, isLoading } = useSelector((store: any) => store.user);
 
   useEffect(() => {
     if (user) {
-      console.log("hello");
-
       setTimeout(() => {
         navigate("/dashboard");
-      }, 3000);
+      }, 1000);
     }
   }, [user]);
 
@@ -68,9 +65,11 @@ const Register = () => {
 
   return (
     <>
-      <Navbar />
+      <Navbar className="navbar" />
       <Wrapper>
-        {user ? (
+        {isLoading ? (
+          <h3>Loading...</h3>
+        ) : user ? (
           <>
             <h3>Redirecting...</h3>
           </>

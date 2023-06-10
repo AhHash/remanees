@@ -1,7 +1,7 @@
 import React from "react";
 
-const BigSidebar = () => {
-  return <div>BigSidebar</div>;
+const BigSidebar = (props: { className: string }) => {
+  return <div className={props.className}>BigSidebar</div>;
 };
 
 export default BigSidebar;

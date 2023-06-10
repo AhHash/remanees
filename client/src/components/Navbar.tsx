@@ -2,9 +2,9 @@ import React from "react";
 import { Link } from "react-router-dom";
 import styled from "styled-components";
 
-const Navbar = () => {
+const Navbar = (props: { className: string }) => {
   return (
-    <Wrapper>
+    <Wrapper className={props.className}>
       <Link to="/">
         <h2>Remanees</h2>
       </Link>

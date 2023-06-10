@@ -25,3 +25,12 @@ export const regiserUserThunk = async <T extends object>(
     return thunkAPI.rejectWithValue((error as any).response.data.msg);
   }
 };
+
+export const getUserThunk = async (url: string, thunkAPI: any) => {
+  try {
+    const { data } = await apiFetch.get(url);
+    return data;
+  } catch (error) {
+    return thunkAPI.rejectWithValue((error as any).response.data.msg);
+  }
+};

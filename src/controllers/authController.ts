@@ -46,4 +46,14 @@ const loginUser: RequestHandler = async (req, res) => {
     .json({ user: { name: user.name, email: user.email } });
 };
 
-export { registerUser, loginUser };
+const getCurrentUser: RequestHandler = async (req, res) => {
+  const user = await User.findOne({ _id: (req as any).user.id });
+  if (!user) {
+    throw new UnauthenticatedError("Invalid Credentials.");
+  }
+
+  res
+    .status(StatusCodes.OK)
+    .json({ user: { name: user.name, email: user.email } });
+};
+export { registerUser, loginUser, getCurrentUser };
