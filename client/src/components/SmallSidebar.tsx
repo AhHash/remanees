@@ -1,29 +1,12 @@
 import React from "react";
 import styled from "styled-components";
 import { NavLink } from "react-router-dom";
+import NavLinks from "./NavLinks";
 
 const SmallSidebar = (props: { className: string }) => {
   return (
     <Wrapper className={props.className}>
-      {["today", "this week"].map((item, index) => {
-        return (
-          <NavLink
-            key={index.toString()}
-            className={({ isActive }) => {
-              return isActive ? "active link" : "link";
-            }}
-            to={
-              item == "today"
-                ? "/dashboard/"
-                : item == "this week"
-                ? "weekly"
-                : ""
-            }
-          >
-            <h5 className="link-text">{item}</h5>
-          </NavLink>
-        );
-      })}
+      <NavLinks />
     </Wrapper>
   );
 };
@@ -48,9 +31,25 @@ const Wrapper = styled.div`
     text-transform: capitalize;
     color: var(--gray-2);
     margin: 0;
+    transition: var(--transition);
+    width: 100%;
   }
 
   .link.active {
     color: var(--black);
+  }
+
+  .link-container {
+    transition: var(--transition);
+    width: 40%;
+    height: 5vh;
+    text-align: center;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+  }
+
+  .link-container:hover {
+    background-color: white;
   }
 `;

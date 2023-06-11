@@ -28,7 +28,7 @@ const Register = () => {
   useEffect(() => {
     if (user) {
       setTimeout(() => {
-        navigate("/dashboard");
+        navigate("/dashboard/");
       }, 1000);
     }
   }, [user]);

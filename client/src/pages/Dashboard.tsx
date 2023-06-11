@@ -45,6 +45,9 @@ const Wrapper = styled.div`
 
   @media screen and (min-width: 768px) {
     grid-template-areas: "nav nav" "sidebar content";
+    grid-template-rows: auto 1fr;
+    grid-template-columns: 1fr 5fr;
+    height: 100vh;
 
     .small-sidebar {
       display: none;

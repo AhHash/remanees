@@ -12,11 +12,11 @@ import Overlay from "../../components/Overlay";
 const Today = () => {
   const tasks = useSelector((store) => (store as any).tasks);
   const { today, todayCompleted } = tasks;
-  console.log(tasks);
   const dispatch = useDispatch();
 
+  console.log(tasks);
+
   const [add, setAdd] = useState(false);
-  const [name, setName] = useState("");
 
   if (tasks.tasksLoading) {
     return <h2 style={{ textAlign: "center" }}>Loading...</h2>;
@@ -24,51 +24,14 @@ const Today = () => {
 
   return (
     <Wrapper>
-      <Overlay className={add ? "overlay-visible" : "overlay-hidden"}>
-        <h2 className="title overlay-title">Add Task</h2>
-        <form
-          className="add-form"
-          onSubmit={() => {
-            dispatch<any>(addTask({ name }));
-          }}
-        >
-          <div className="form-row">
-            <label htmlFor="name">task name</label>
-            <input
-              className="form-input"
-              type="text"
-              id="name"
-              value={name}
-              onChange={(event) => {
-                setName(event.target.value);
-              }}
-            />
-          </div>
-          <div className="btns">
-            <button
-              type="submit"
-              className="btn form-btn"
-              onClick={() => {
-                setAdd(false);
-              }}
-            >
-              add
-            </button>
-            <button
-              className="form-btn btn"
-              onClick={() => {
-                setAdd(false);
-              }}
-              type="button"
-            >
-              cancel
-            </button>
-          </div>
-        </form>
-      </Overlay>
+      <Overlay
+        className={add ? "overlay-visible" : "overlay-hidden"}
+        setAdd={setAdd}
+      />
       <div
         className="add-btn"
         onClick={() => {
+          console.log(add);
           setAdd(!add);
         }}
       >
@@ -80,7 +43,14 @@ const Today = () => {
           today.map((task: any, index: number) => {
             return (
               <article className="task undone" key={index}>
-                <h5 className="name">{task.name}</h5>
+                <div
+                  className="circle circle-red"
+                  style={{ backgroundColor: task.color || "black" }}
+                ></div>
+                <div className="task-text">
+                  <h5 className="name">{task.name}</h5>
+                  <p className="description-hidden">{task.description}</p>
+                </div>
                 <div className="btns">
                   <button
                     className="done-btn btn"
@@ -111,6 +81,10 @@ const Today = () => {
           todayCompleted.map((task: any, index: number) => {
             return (
               <article className="task completed" key={index}>
+                <div
+                  className="circle circle-green"
+                  style={{ backgroundColor: task.color || "black" }}
+                ></div>
                 <h5 className="name">{task.name}</h5>
                 <div className="btns">
                   <button
@@ -177,6 +151,7 @@ const Wrapper = styled.div`
     justify-content: space-between;
     align-items: center;
     margin-bottom: 0.25rem;
+    position: relative;
 
     h5 {
       margin: 0;
@@ -207,36 +182,40 @@ const Wrapper = styled.div`
   }
 
   .overlay-hidden {
-    opacity: 0;
+    display: none;
   }
 
-  .overlay-title {
-    text-align: center;
+  .circle {
+    height: 18px;
+    width: 18px;
+    border-radius: 11px;
+    position: absolute;
+    left: 0;
+    transform: translateX(-50%);
   }
 
-  .form-row {
-    width: 100%;
+  .circle-red {
+    border: 2px solid var(--red-light);
+  }
+
+  .circle-green {
+    border: 2px solid var(--green-light);
+  }
+
+  .task-text {
     display: flex;
-    justify-content: space-evenly;
-    margin-top: 2rem;
-    font-size: 1.25rem;
-    text-transform: capitalize;
+    align-items: baseline;
+    gap: 1rem;
   }
 
-  .add-form {
-    width: 100%;
-    display: flex;
-    flex-direction: column;
-    justify-content: space-evenly;
-    align-items: center;
-    gap: 2rem;
+  .task-text > p {
+    margin: 0;
+    color: var(--gray-2);
   }
 
-  .form-btn {
-    margin-bottom: 3rem;
-  }
-
-  .form-input {
-    text-align: center;
+  @media screen and (max-width: 768px) {
+    .description-hidden {
+      display: none;
+    }
   }
 `;
