@@ -101,7 +101,17 @@ export const getCompletedTasks = createAsyncThunk(
 
 export const addTask = createAsyncThunk(
   "tasks/addTask",
-  async (task: object, thunkAPI) => {
+  async (task: any, thunkAPI) => {
+    try {
+      Number(task.day);
+    } catch {
+      task.day = 0;
+    }
+
+    if (task.day > 7) {
+      task.day = 0;
+    }
+
     return addTaskThunk("tasks/", task, thunkAPI);
   }
 );

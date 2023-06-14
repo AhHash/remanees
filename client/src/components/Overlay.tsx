@@ -4,7 +4,12 @@ import { addTask } from "../features/tasks/tasksSlice";
 import { useDispatch } from "react-redux";
 
 const Overlay = ({ className, setAdd }: any) => {
-  const [task, setTask] = useState({ name: "", description: "", color: "" });
+  const [task, setTask] = useState({
+    name: "",
+    description: "",
+    color: "",
+    day: "",
+  });
   const dispatch = useDispatch();
 
   return (
@@ -14,7 +19,7 @@ const Overlay = ({ className, setAdd }: any) => {
         className="add-form"
         onSubmit={() => {
           dispatch<any>(addTask(task));
-          setTask({ ...task, name: "", description: "", color: "" });
+          setTask({ ...task, name: "", description: "", color: "", day: "" });
         }}
       >
         <div className="form-row">
@@ -55,6 +60,30 @@ const Overlay = ({ className, setAdd }: any) => {
               setTask({ ...task, color: event.target.value });
             }}
           />
+        </div>
+        <div className="form-row">
+          <label htmlFor="day">day</label>
+          <select
+            className="form-select"
+            id="day"
+            placeholder="1 to 7. 1 is Sunday"
+            value={task.day}
+            onChange={(event) => {
+              setTask({
+                ...task,
+                day: event.target.value,
+              });
+            }}
+          >
+            <option value="0">Kyou</option>
+            <option value="1">Nichyoubi</option>
+            <option value="2">Getsuyoubi</option>
+            <option value="3">Kayoubi</option>
+            <option value="4">Tsuiyoubi</option>
+            <option value="5">Mokuyoubi</option>
+            <option value="6">Kinyoubi</option>
+            <option value="7">Doyoubi</option>
+          </select>
         </div>
         <div className="btns">
           <button
@@ -104,9 +133,13 @@ const Wrapper = styled.div`
     display: flex;
     justify-content: space-between;
     align-items: center;
-    margin-top: ١rem;
+    /* margin-top: 1rem; */
     font-size: 1.25rem;
     text-transform: capitalize;
+  }
+
+  #day {
+    width: 12.4rem;
   }
 
   .add-form {

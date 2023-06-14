@@ -47,7 +47,18 @@ const taskSchema = new mongoose.Schema(
     },
     lastUpdated: {
       type: Date,
-      default: new Date(),
+      default: function () {
+        console.log((this as any).day);
+        if ((this as any).day) {
+          console.log("in");
+          const date = new Date();
+          date.setDate(
+            date.getUTCDate() + (this as any).day - 1 - new Date().getUTCDay()
+          );
+          return date;
+        }
+        return new Date();
+      },
     },
   }
   // { timestamps: true }

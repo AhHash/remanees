@@ -14,8 +14,6 @@ const Today = () => {
   const { today, todayCompleted } = tasks;
   const dispatch = useDispatch();
 
-  console.log(tasks);
-
   const [add, setAdd] = useState(false);
 
   if (tasks.tasksLoading) {
@@ -31,7 +29,6 @@ const Today = () => {
       <div
         className="add-btn"
         onClick={() => {
-          console.log(add);
           setAdd(!add);
         }}
       >
@@ -48,8 +45,16 @@ const Today = () => {
                   style={{ backgroundColor: task.color || "black" }}
                 ></div>
                 <div className="task-text">
-                  <h5 className="name">{task.name}</h5>
-                  <p className="description-hidden">{task.description}</p>
+                  <h5 className="name">
+                    {task.name.length > 25
+                      ? task.name.slice(0, 25) + "..."
+                      : task.name}
+                  </h5>
+                  <p className="description-hidden">
+                    {task.description.length > 35
+                      ? task.description.slice(0, 35) + "..."
+                      : task.description}
+                  </p>
                 </div>
                 <div className="btns">
                   <button
@@ -85,7 +90,11 @@ const Today = () => {
                   className="circle circle-green"
                   style={{ backgroundColor: task.color || "black" }}
                 ></div>
-                <h5 className="name">{task.name}</h5>
+                <h5 className="name">
+                  {task.name.length > 25
+                    ? task.name.slice(0, 25) + "..."
+                    : task.name}
+                </h5>
                 <div className="btns">
                   <button
                     className="done-btn btn"
