@@ -6,6 +6,7 @@ import "react-toastify/dist/ReactToastify.css";
 import "./app.css";
 import { useDispatch } from "react-redux";
 import { getUser } from "./features/user/userSlice";
+import NotFound from "./pages/NotFound";
 
 function App() {
   const dispatch = useDispatch();
@@ -27,6 +28,7 @@ function App() {
           <Route index element={<Today />} />
           <Route path="weekly" element={<ThisWeek />} />
         </Route>
+        <Route path="*" element={<NotFound />} />
       </Routes>
       <ToastContainer
         position="top-center"

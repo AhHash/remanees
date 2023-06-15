@@ -1,5 +1,6 @@
 // packages
 import dotenv from "dotenv";
+import path from "path";
 dotenv.config();
 // import path from "path";
 import cors from "cors";
@@ -29,9 +30,9 @@ server.use(cors());
 server.use(express.json());
 server.use(cookieParser("%C&F)J@NcRfUjXn2r5u8x/A?D(G-KaPd"));
 
-// server.get("*", (req, res) => {
-//   res.sendFile(path.resolve(__dirname, "../client/dist", "index.html"));
-// });
+server.get("*", (req, res) => {
+  res.sendFile(path.resolve(__dirname, "../client/dist", "index.html"));
+});
 
 server.use("/api/v1/users", authRouter);
 server.use("/api/v1/tasks", checkAuthentication, taskRouter);
