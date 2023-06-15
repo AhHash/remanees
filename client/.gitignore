@@ -24,4 +24,4 @@ dist-ssr
 *.sw?
 
 # proxy
-vite.config.ts
+# vite.config.ts
