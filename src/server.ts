@@ -24,18 +24,19 @@ import checkAuthentication from "./middleware/checkAuthentication";
 import morgan from "morgan";
 
 server.use(morgan("dev"));
+server.use(express.static(path.resolve(__dirname, "../client/dist")));
 
 // routes
 server.use(cors());
 server.use(express.json());
 server.use(cookieParser("%C&F)J@NcRfUjXn2r5u8x/A?D(G-KaPd"));
 
+server.use("/api/v1/users", authRouter);
+server.use("/api/v1/tasks", checkAuthentication, taskRouter);
+
 server.get("*", (req, res) => {
   res.sendFile(path.resolve(__dirname, "../client/dist", "index.html"));
 });
-
-server.use("/api/v1/users", authRouter);
-server.use("/api/v1/tasks", checkAuthentication, taskRouter);
 
 server.use(errorHandler);
 
