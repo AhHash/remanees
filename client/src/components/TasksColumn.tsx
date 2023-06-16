@@ -42,7 +42,9 @@ const TasksColumn = ({
                 <button
                   className="done-btn btn"
                   onClick={() => {
-                    dispatch<any>(updateTask({ ...task, isDone: true }));
+                    dispatch<any>(
+                      updateTask({ ...task, isDone: completed ? false : true })
+                    );
                   }}
                 >
                   Mark as {task.isDone ? "undone" : "done"}
