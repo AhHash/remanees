@@ -11,7 +11,7 @@ const Dashboard = () => {
   useEffect(() => {
     dispatch<any>(getDueTasks());
     dispatch<any>(getCompletedTasks());
-  });
+  }, []);
 
   return (
     <Wrapper>
